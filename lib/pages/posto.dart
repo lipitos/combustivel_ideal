@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:combustivel_ideal/helpers/posto_helper.dart';
 import 'package:combustivel_ideal/model/posto.dart';
 import 'package:combustivel_ideal/pages/lista.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class PostoPage extends StatefulWidget{
 
   final Posto posto;
 
-  PostoPage({this.posto, Posto});
+  PostoPage({this.posto});
 
   @override
   _PostoPageState createState() =>_PostoPageState();
@@ -18,8 +19,9 @@ class PostoPage extends StatefulWidget{
 
 class _PostoPageState extends State<PostoPage>{
 
+  PostoHelper helper = PostoHelper();
+
   String _melhor = "";
-  String _dataAtualizada = "";
   double perc = 0;
 
   final _postoController = TextEditingController();
@@ -33,12 +35,11 @@ class _PostoPageState extends State<PostoPage>{
   bool _postoEdited = false;
 
   void _resetFields(){
-    _postoController.text = _postoTemp.nome = '';
+    _postoController.text = '';
     _alcoolController.text = '';
     _gasolinaController.text = '';
     perc = 0;
-    _postoTemp.alcool = '';
-    _postoTemp.gasolina = '';
+    _postoTemp = Posto();
   }
 
   void _verificar() {
@@ -52,6 +53,10 @@ class _PostoPageState extends State<PostoPage>{
       _postoTemp.data = formatDate(DateTime.now(),
           [dd, '/', mm, '/', yyyy, ' as ', HH, ':', nn, ":", ss]).toString();
     });
+  }
+
+  void _salvar(Posto _postoTemp){
+    helper.insert(_postoTemp);
   }
 
   void _showAlert(){
@@ -69,16 +74,10 @@ class _PostoPageState extends State<PostoPage>{
            <Widget>[
                   FlatButton(
                     onPressed: (){
-                      if (_postoTemp.nome != null && _postoTemp.nome.isNotEmpty){
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Lista(posto: _postoTemp)
-                            ),
-                        );
-                      }
+                      _salvar(_postoTemp);
                       _resetFields();
-                    },
+                      Navigator.pop(context);
+                      },
                     child: Text("OK"),
                   ),
                   Padding(

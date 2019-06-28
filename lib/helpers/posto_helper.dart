@@ -26,7 +26,7 @@ class PostoHelper{
     final path = await getDatabasesPath();
     final pathDB = join(path, "posto.db");
 
-    final String sql = "CREATE TABLE posto ("
+    final String sql = "CREATE TABLE lista_posto ("
                       "c_id INTEGER PRIMARY KEY,"
                       "c_nome TEXT,"
                       "c_alcool TEXT,"
@@ -47,7 +47,7 @@ class PostoHelper{
   //Create
   Future<Posto> insert (Posto posto) async{
     Database dbPosto = await db;
-    posto.id = await dbPosto.insert("posto", posto.toMap());
+    posto.id = await dbPosto.insert("lista_posto", posto.toMap());
     return posto;
   }
 
@@ -55,7 +55,7 @@ class PostoHelper{
   Future<Posto> selectById(int id) async{
     Database dbPosto = await db;
     List<Map> maps = await dbPosto.query(
-      "posto",
+      "lista_posto",
       columns:[
         "c_id", "c_nome", "c_alcool", "c_gasolina", "c_data"
       ],
@@ -72,7 +72,7 @@ class PostoHelper{
   //List
   Future<List> selectAll() async{
     Database dbPosto = await db;
-    List list = await dbPosto.rawQuery("SELECT * FROM posto");
+    List list = await dbPosto.rawQuery("SELECT * FROM lista_posto");
     List<Posto> lsPosto = List();
     for(Map m in list){
       lsPosto.add(Posto.fromMap(m));
@@ -83,13 +83,13 @@ class PostoHelper{
   //Update
   Future<int> update (Posto posto) async {
     Database dbPosto = await db;
-    return await dbPosto.update("posto", posto.toMap(), where: "c_id = ?", whereArgs: [posto.id]);
+    return await dbPosto.update("lista_posto", posto.toMap(), where: "c_id = ?", whereArgs: [posto.id]);
   }
 
   //Delete
   Future<int> delete(int id) async{
     Database dbPosto = await db;
-    return await dbPosto.delete("posto", where: "c_id = ?", whereArgs: [id]);
+    return await dbPosto.delete("lista_posto", where: "c_id = ?", whereArgs: [id]);
   }
 
   Future close() async{

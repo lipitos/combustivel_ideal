@@ -8,7 +8,7 @@ class SplashHome extends StatefulWidget{
 
 class _SplashHomeState extends State<SplashHome>{
 
-  String _versao = "1.0.0";
+  String _versao = "1.1.1";
 
   @override
   void initState(){
